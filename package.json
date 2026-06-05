@@ -1,0 +1,16 @@
+{
+  "name": "bug-museum-participant",
+  "version": "1.0.0",
+  "description": "Museum of Bugs – Workshop demo for debugging with AI and Chrome DevTools MCP",
+  "scripts": {
+    "dev": "concurrently --names \"VITE,API\" --prefix-colors \"cyan,yellow\" \"npm run dev:client\" \"npm run dev:api\"",
+    "dev:client": "cd client && npm run dev",
+    "dev:api": "cd server && node index.js",
+    "build": "cd client && npm run build",
+    "preview": "cd client && npm run preview",
+    "install:all": "npm install && cd client && npm install && cd ../server && npm install"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}
