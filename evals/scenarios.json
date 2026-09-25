@@ -1,0 +1,76 @@
+{
+  "workshopTitle": "Debugging with AI Agents + Chrome DevTools",
+  "philosophy": "Stop describing bugs to agents. Give them access to the running system and let them investigate.",
+  "evalScenarios": [
+    {
+      "id": "ex0-warmup",
+      "name": "Exercise 0: Warm-Up (The Missing Specimen)",
+      "estimatedMinutes": 7,
+      "bugReport": "The Ant Colony exhibit card on the homepage never renders its specimen photograph, showing a broken image fallback.",
+      "requiredDevTools": ["Network Panel (Filter: Img)"],
+      "staticTrap": "Assuming the image file doesn't exist anywhere in the repository.",
+      "runtimeEvidence": "DevTools Network tab shows 404 Not Found for https://museum-of-bugs.example.com/images/ant-colony-missing.jpg.",
+      "acceptanceCriteria": [
+        "Ant Colony exhibit card renders its specimen image",
+        "Zero 404 image errors in DevTools Network tab"
+      ]
+    },
+    {
+      "id": "ex1-wrong-diagnosis",
+      "name": "Exercise 1: The Wrong Diagnosis",
+      "estimatedMinutes": 20,
+      "bugReport": "Searching for the 'Goliath Beetle' in the search bar fails with an error callout. Find the cause and fix it.",
+      "requiredDevTools": ["Console Panel", "Network Panel (Status Code & Response Body)"],
+      "staticTrap": "Inspecting SearchBar.jsx and assuming unescaped regex characters (new RegExp) are the root cause.",
+      "runtimeEvidence": "Network tab shows GET /api/exhibits/search?q=Goliath+Beetle returns HTTP 500 Internal Server Error with database crash payload.",
+      "acceptanceCriteria": [
+        "Searching 'Goliath Beetle' returns HTTP 200 from /api/exhibits/search",
+        "Goliath Beetle exhibit card renders in search results",
+        "Console remains clean with zero 500 server errors"
+      ]
+    },
+    {
+      "id": "ex2-phantom-save",
+      "name": "Exercise 2: The Phantom Save",
+      "estimatedMinutes": 25,
+      "bugReport": "The UI says the curator notes were saved successfully, but after refreshing the page the old notes return. Find out why, fix it, and prove the fix works.",
+      "requiredDevTools": ["Network Panel (Request Payload & HTTP Status)", "Page Refresh Verification"],
+      "staticTrap": "Seeing the green success badge in UI and assuming the save succeeded without inspecting network traffic.",
+      "runtimeEvidence": "Network tab shows PUT /api/exhibits/:id/notes returned HTTP 400 Bad Request due to payload key mismatch ('curator_notes' vs 'notes').",
+      "acceptanceCriteria": [
+        "PUT /api/exhibits/:id/notes sends { notes: '...' } payload and returns HTTP 200",
+        "Curator notes persist across browser page reload (GET /api/exhibits)",
+        "UI correctly reflects server state"
+      ]
+    },
+    {
+      "id": "ex3-works-on-my-machine",
+      "name": "Exercise 3: Works on My Machine",
+      "estimatedMinutes": 25,
+      "bugReport": "Visitors on mobile devices report they cannot click the 'Reserve Guided Specimen Tour' button. It works completely fine on desktop. Find the trigger and fix it.",
+      "requiredDevTools": ["Device Mode / Responsive Emulation (390px)", "DOM / Elements Inspection", "Screenshots"],
+      "staticTrap": "Testing only on desktop screen (1280px) and concluding the button works fine.",
+      "runtimeEvidence": "In 390px mobile viewport, the fixed .mobile-audio-banner overlay with z-index: 9999 intercepts clicks over the modal CTA.",
+      "acceptanceCriteria": [
+        "In 390px mobile viewport, 'Reserve Guided Specimen Tour' button is clickable",
+        "Clicking the button confirms the tour reservation",
+        "No pointer events interception from ambient banners"
+      ]
+    },
+    {
+      "id": "ex4-double-ticket",
+      "name": "Exercise 4: Final Boss — Double Ticket",
+      "estimatedMinutes": 35,
+      "bugReport": "Some visitors accidentally purchase duplicate tickets. Support says it happens mostly on mobile connections. We cannot reproduce it reliably on fast office network. Fix it.",
+      "requiredDevTools": ["Network Throttling (Slow 3G)", "Network Panel (Duplicate Request Tracking)"],
+      "staticTrap": "Submitting form with a single click on fast desktop and assuming no race condition exists.",
+      "runtimeEvidence": "Under 1200ms latency or Slow 3G throttling, clicking the submit button twice dispatches two concurrent POST /api/tickets requests, creating two duplicate bookings.",
+      "acceptanceCriteria": [
+        "Rapid multiple clicks dispatch exactly ONE POST /api/tickets request",
+        "Submit button is disabled immediately upon submission",
+        "UI provides clear 'Processing Booking...' in-progress feedback",
+        "Single ticket confirmation is generated"
+      ]
+    }
+  ]
+}

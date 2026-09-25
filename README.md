@@ -1,8 +1,8 @@
 # Museum of Bugs 🪲
 
-A workshop demo application for **"Debugging the Web with AI, Antigravity, Chrome DevTools MCP & Chrome for Agents"**.
+A hands-on workshop environment for **"Debugging the Web with AI Agents + Chrome DevTools"**.
 
-A polished natural history museum website about insects — containing 16 intentionally introduced bugs and setup exercises for hands-on debugging.
+> **"Stop describing bugs to agents. Give them access to the running system and let them investigate."**
 
 ---
 
@@ -19,7 +19,7 @@ A polished natural history museum website about insects — containing 16 intent
 # Install all dependencies
 npm run install:all
 
-# Start both Vite (port 5173) and Express API (port 3001)
+# Start both Vite client (:5173) and Express API (:3001)
 npm run dev
 ```
 
@@ -27,78 +27,42 @@ Open [http://localhost:5173](http://localhost:5173)
 
 ---
 
-## 🐛 What's Inside
+## 🔁 The Investigation Loop
 
-The app contains **16 intentionally introduced bugs and setup exercises** across:
+Every exercise in this workshop follows the 5-step diagnostic loop:
 
-| Category | Count | Exercises |
-|----------|-------|-----------|
-| Accessibility | 3 | #1, #2, #3 |
-| Performance | 2 | #4, #5 |
-| CSS | 2 | #6, #7 |
-| JavaScript | 2 | #8, #9 |
-| Network | 2 | #10, #11 |
-| Data | 1 | #12 |
-| AI Demo | 2 | #13, #16 |
-| Runtime | 1 | #14 |
-| Memory | 1 | #15 |
+```mermaid
+graph LR
+    O["<b>1. OBSERVE</b><br/>Reproduce & gather data"] --> I["<b>2. INVESTIGATE</b><br/>Trace runtime cause"]
+    I --> H["<b>3. HYPOTHESIS</b><br/>Form a theory"]
+    H --> F["<b>4. FIX</b><br/>Apply change"]
+    F --> V["<b>5. VERIFY</b><br/>Prove it works"]
+    V -. "If verification fails" .-> I
+```
+
+Skill instructions are available in:
+`.agents/skills/investigation-loop/SKILL.md`
 
 ---
 
-## 📁 Project Structure
+## 🎯 The 4 Workshop Exercises (+ Warm-Up)
 
-```
-bug-museum-participant/
-├── client/                    # React + Vite frontend
-│   ├── src/
-│   │   ├── components/        # React components (with bugs)
-│   │   ├── data/              # Exhibit & shop data
-│   │   └── assets/            # Insect illustrations
-│   └── public/
-│       ├── dinosaur.js        # Bug #5 – unused script
-│       └── old-analytics.js   # Bug #5 – unused legacy analytics
-├── server/                    # Express API
-│   ├── index.js               # Bug #10 – no CORS headers
-│   └── exhibits-data.js       # Bug #12 – wrong rarity data
-├── functions/                 # Firebase Cloud Functions
-└── firebase.json              # Firebase Hosting config
-```
+| Exercise | Scenario | Diagnostic Focus |
+| :--- | :--- | :--- |
+| **Ex 0** | **Warm-Up: The Missing Specimen** | Environment setup · Network panel inspection |
+| **Ex 1** | **The Wrong Diagnosis** | Avoiding static code traps · Network 500 error tracing |
+| **Ex 2** | **The Phantom Save** | Optimistic UI vs failed persistence · Page reload verification |
+| **Ex 3** | **Works on My Machine** | Mobile responsive emulation (390px) · DOM touch overlay inspection |
+| **Ex 4** | **Final Boss: Double Ticket** | Network throttling (Slow 3G) · Concurrency race conditions |
+
+See [WORKSHOP.md](./WORKSHOP.md) for full exercise descriptions.
 
 ---
 
-## 🔥 Firebase Deployment
+## 📊 Running Evals
 
-1. Update `.firebaserc` with your Firebase project ID
-2. Build the client:
-   ```bash
-   npm run build
-   ```
-3. Install Functions dependencies:
-   ```bash
-   cd functions && npm install
-   ```
-4. Deploy:
-   ```bash
-   firebase deploy
-   ```
+To run the automated evaluation suite:
 
-Or use the emulator for local testing:
 ```bash
-firebase emulators:start
+node evals/run-evals.js
 ```
-
----
-
-## 🛠️ Bug Overview (No Spoilers)
-
-The app looks polished at first glance. Bugs are hidden in:
-- Form elements
-- Interactive buttons
-- Search functionality
-- The gift shop cart
-- Network requests
-- JavaScript event handling
-- Mobile layout
-- Memory management
-
-Use Chrome DevTools, Antigravity, and Chrome DevTools MCP to find them all.

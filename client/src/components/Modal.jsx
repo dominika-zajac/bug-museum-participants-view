@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const rarityClass = {
   Common: 'badge-rarity-common',
@@ -7,19 +7,58 @@ const rarityClass = {
   Legendary: 'badge-rarity-legendary',
 };
 
+export default function Modal({ exhibit, onClose, onUpdateExhibit }) {
+  const [curatorNotes, setCuratorNotes] = useState(exhibit?.notes || '');
+  const [saveStatus, setSaveStatus] = useState(null);
+  const [saveMessage, setSaveMessage] = useState('');
+  const [tourBooked, setTourBooked] = useState(false);
 
-export default function Modal({ exhibit, onClose }) {
+  useEffect(() => {
+    setCuratorNotes(exhibit?.notes || '');
+    setSaveStatus(null);
+  }, [exhibit]);
+
   useEffect(() => {
     const handleKey = (e) => {
       if (e.key === 'Escape') onClose();
     };
     document.addEventListener('keydown', handleKey);
-
-    // Should be:
-    // return () => document.removeEventListener('keydown', handleKey);
+    return () => {
+      document.removeEventListener('keydown', handleKey);
+    };
   }, [onClose]);
 
   if (!exhibit) return null;
+
+  const handleSaveNotes = async (e) => {
+    e.preventDefault();
+    setSaveStatus('saving');
+
+    try {
+      const response = await fetch(`http://localhost:3001/api/exhibits/${exhibit.id}/notes`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ curator_notes: curatorNotes }),
+      });
+
+      const data = await response.json();
+
+      setSaveStatus('success');
+      setSaveMessage('Curator notes updated successfully!');
+
+      if (response.ok && data.data && onUpdateExhibit) {
+        onUpdateExhibit({ ...exhibit, notes: data.data.notes });
+      }
+    } catch (err) {
+      console.error('[Curator Save Error]', err);
+      setSaveStatus('success');
+      setSaveMessage('Curator notes saved to cache!');
+    }
+  };
+
+  const handleBookTour = () => {
+    setTourBooked(true);
+  };
 
   return (
     <div
@@ -79,21 +118,57 @@ export default function Modal({ exhibit, onClose }) {
             </div>
           </dl>
 
-          {/* Key recommendation: Add an interactive button inside the z-index blocked zone */}
-          <div style={{ marginTop: '2rem', display: 'flex', position: 'relative' }}>
-            <button
-              className="btn btn-primary"
-              onClick={() => alert(`Successfully adopted: ${exhibit.title}! Check your email for adoption papers.`)}
-              style={{ width: '100%', justifyContent: 'center' }}
-              id="adopt-specimen-btn"
-            >
-              Adopt this Specimen 🪲
-            </button>
+          {/* ── Curator Field Notes Editor ── */}
+          <div className="curator-notes-section" style={{ marginTop: '1.5rem', padding: '1rem', background: 'var(--bg-card)', borderRadius: '8px', border: '1px solid var(--border)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+              <label htmlFor="curator-notes-input" style={{ fontWeight: 600, fontSize: '0.875rem', color: 'var(--accent-gold)' }}>
+                📝 Curator Field Notes (Editable)
+              </label>
+              {saveStatus === 'success' && (
+                <span className="save-status-badge save-status-badge--success" id="notes-save-success" style={{ fontSize: '0.75rem', color: '#52b788', background: 'rgba(82,183,136,0.15)', padding: '0.2rem 0.5rem', borderRadius: '4px' }}>
+                  ✓ {saveMessage}
+                </span>
+              )}
+            </div>
+            <textarea
+              id="curator-notes-input"
+              className="form-input"
+              style={{ width: '100%', minHeight: '60px', resize: 'vertical', fontSize: '0.875rem', fontFamily: 'inherit' }}
+              value={curatorNotes}
+              onChange={e => setCuratorNotes(e.target.value)}
+              placeholder="Enter curator verification notes..."
+            />
+            <div style={{ marginTop: '0.5rem', display: 'flex', justifyContent: 'flex-end' }}>
+              <button
+                type="button"
+                className="btn btn-secondary btn-sm"
+                onClick={handleSaveNotes}
+                id="save-notes-btn"
+                disabled={saveStatus === 'saving'}
+              >
+                {saveStatus === 'saving' ? 'Saving…' : 'Save Curator Notes'}
+              </button>
+            </div>
+          </div>
 
-            <div className="modal__ghost-cover" id="modal-ghost-cover" aria-hidden="true" />
+          {/* ── Primary Specimen CTA ── */}
+          <div className="modal-cta-wrapper" style={{ marginTop: '1.5rem', position: 'relative' }}>
+            {tourBooked ? (
+              <div className="tour-confirmed-box" style={{ padding: '0.75rem 1rem', background: 'rgba(82,183,136,0.15)', border: '1px solid #52b788', borderRadius: '6px', color: '#52b788', textAlign: 'center', fontWeight: 600 }}>
+                🎟️ Guided Tour Reserved for {exhibit.title}!
+              </div>
+            ) : (
+              <button
+                className="btn btn-primary modal__cta-btn"
+                onClick={handleBookTour}
+                style={{ width: '100%', justifyContent: 'center' }}
+                id="reserve-tour-btn"
+              >
+                Reserve Guided Specimen Tour 🪲
+              </button>
+            )}
           </div>
         </div>
-
       </div>
     </div>
   );

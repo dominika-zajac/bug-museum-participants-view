@@ -22,6 +22,7 @@
 
   --text-primary: #e6edf3;
   --text-secondary: #8b949e;
+  /* BUG #3b: Footer/secondary text is intentionally too dim for contrast */
   --text-muted:   #6e7681;
   --text-amber:   var(--amber);
 
@@ -106,6 +107,7 @@ h3 { font-size: 1.25rem; }
 
 /* ── Header ─────────────────────────────────────────────── */
 .header {
+  /* BUG #7: sticky header with z-index that causes content overlap on anchor nav */
   position: sticky;
   top: 0;
   z-index: 50;
@@ -551,6 +553,7 @@ h3 { font-size: 1.25rem; }
   flex-wrap: wrap;
 }
 
+/* BUG #6: Fixed width cards that break on mobile (intentional) */
 .exhibits-grid {
   display: grid;
   /* Intentional bug: min 300px but no max on track — causes horizontal scroll on small screens */
@@ -632,6 +635,7 @@ h3 { font-size: 1.25rem; }
   color: var(--amber);
 }
 
+/* BUG #2: Favorite button has NO aria-label */
 .exhibit-card__fav {
   position: absolute;
   top: 0.75rem;
@@ -691,6 +695,7 @@ h3 { font-size: 1.25rem; }
   border: 1px solid rgba(82,183,136,0.2);
 }
 
+/* BUG #3: Rarity badge has insufficient color contrast */
 .badge-rarity {
   border: 1px solid transparent;
 }
@@ -786,6 +791,7 @@ h3 { font-size: 1.25rem; }
   overflow-y: auto;
   position: relative;
   animation: slideUp 0.3s ease;
+  /* BUG #13: z-index demo – there's a visually hidden overlay element covering part of the modal */
 }
 
 @keyframes slideUp {
@@ -891,6 +897,7 @@ h3 { font-size: 1.25rem; }
   color: var(--text-primary);
 }
 
+/* BUG #13: Hidden overlay covering modal button area */
 .modal__ghost-cover {
   position: absolute;
   top: 0;
@@ -959,6 +966,7 @@ h3 { font-size: 1.25rem; }
   margin-bottom: 1.25rem;
 }
 
+/* BUG #1: Form inputs have NO <label> elements - only placeholder text */
 .form-input {
   width: 100%;
   background: var(--bg-surface);
@@ -1101,6 +1109,7 @@ h3 { font-size: 1.25rem; }
   font-family: var(--font-display);
 }
 
+/* BUG #2b: Cart button is a div with role=button, missing aria-label */
 .shop-card__add-btn {
   width: 100%;
   padding: 0.625rem;
@@ -1177,6 +1186,7 @@ h3 { font-size: 1.25rem; }
 .footer__brand p {
   margin-top: 0.75rem;
   font-size: 0.875rem;
+  /* BUG #3b: Fixed: contrast footer text to meet WCAG AA standards */
   color: var(--text-secondary);
   max-width: 300px;
   line-height: 1.6;
@@ -1200,6 +1210,7 @@ h3 { font-size: 1.25rem; }
 
 .footer__links a {
   font-size: 0.875rem;
+  /* BUG #3b: Fixed: Also low contrast on these links */
   color: var(--text-secondary);
   transition: color var(--transition);
 }
@@ -1220,6 +1231,7 @@ h3 { font-size: 1.25rem; }
 
 .footer__copy {
   font-size: 0.8rem;
+  /* BUG #3b: Fixed: Low contrast copyright text */
   color: var(--text-muted);
 }
 
@@ -2351,5 +2363,63 @@ h3 { font-size: 1.25rem; }
   border-color: rgba(255, 255, 255, 0.15);
   color: var(--text-secondary);
 }
+
+/* ── Mobile Audio Banner (Exercise 3: Works on My Machine) ── */
+.mobile-audio-banner {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  .mobile-audio-banner {
+    display: block;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 9999;
+    background: rgba(18, 22, 34, 0.96);
+    backdrop-filter: blur(12px);
+    border-top: 1px solid rgba(224, 124, 160, 0.3);
+    box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.7);
+    padding: 0.875rem 1.25rem;
+  }
+
+  .mobile-audio-banner__content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    font-size: 0.875rem;
+    color: var(--text-primary);
+  }
+
+  .mobile-audio-banner__btn {
+    background: #e07ca0;
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 0.35rem 0.85rem;
+    font-weight: 700;
+    font-size: 0.75rem;
+    cursor: pointer;
+  }
+}
+
+/* ── Curator Notes Styles (Exercise 2: The Phantom Save) ── */
+.curator-notes-section {
+  transition: border-color var(--transition);
+}
+
+.curator-notes-section:focus-within {
+  border-color: var(--accent-gold);
+}
+
+.save-status-badge {
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
 
 

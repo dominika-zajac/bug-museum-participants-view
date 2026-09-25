@@ -1,5 +1,5 @@
-import React, { useState, useCallback } from 'react';
-import { Routes, Route, useLocation } from 'react-router-dom';
+import React, { useState, useCallback, useEffect } from 'react';
+import { Routes, Route } from 'react-router-dom';
 import './index.css';
 
 import Header from './components/Header';
@@ -11,19 +11,48 @@ import GiftShop from './components/GiftShop';
 import Gallery from './components/Gallery';
 import Footer from './components/Footer';
 
-import { exhibits } from './data/exhibits';
+import { exhibits as defaultExhibits } from './data/exhibits';
 
 function MuseumSite({ cartCount, onAddToCart }) {
+  const [exhibitsList, setExhibitsList] = useState(defaultExhibits);
   const [selectedExhibit, setSelectedExhibit] = useState(null);
   const [searchFilter, setSearchFilter] = useState({});
+
+  useEffect(() => {
+    fetch('http://localhost:3001/api/exhibits')
+      .then(res => res.json())
+      .then(data => {
+        if (data.success && Array.isArray(data.data)) {
+          setExhibitsList(prev => prev.map(localEx => {
+            const remoteEx = data.data.find(d => d.id === localEx.id);
+            return remoteEx ? { ...localEx, ...remoteEx } : localEx;
+          }));
+        }
+      })
+      .catch(() => {
+        // Fallback to local default data
+      });
+  }, []);
 
   const handleSearch = useCallback((filter) => {
     setSearchFilter(filter);
   }, []);
 
-  const filteredExhibits = exhibits.filter(exhibit => {
+  const handleExhibitUpdate = useCallback((updatedExhibit) => {
+    setExhibitsList(prev => prev.map(e => e.id === updatedExhibit.id ? updatedExhibit : e));
+    setSelectedExhibit(updatedExhibit);
+  }, []);
+
+  const filteredExhibits = exhibitsList.filter(exhibit => {
     if (searchFilter.error) return false;
-    if (searchFilter.nameRegex && !searchFilter.nameRegex.test(exhibit.title)) return false;
+
+    if (searchFilter.apiResults) {
+      const isMatch = searchFilter.apiResults.some(r => r.id === exhibit.id);
+      if (!isMatch) return false;
+    } else if (searchFilter.nameRegex && !searchFilter.nameRegex.test(exhibit.title)) {
+      return false;
+    }
+
     if (searchFilter.category && exhibit.category !== searchFilter.category) return false;
     if (searchFilter.rarity && exhibit.rarity !== searchFilter.rarity) return false;
     return true;
@@ -85,6 +114,19 @@ function MuseumSite({ cartCount, onAddToCart }) {
         </div>
       </section>
 
+      {/* ── Mobile Audio Guide Floating Banner ── */}
+      <div className="mobile-audio-banner" id="mobile-audio-banner">
+        <div className="mobile-audio-banner__content">
+          <span>🎧 <strong>Audio Tour Active</strong> · Hall 3</span>
+          <button
+            className="mobile-audio-banner__btn"
+            onClick={() => alert('Audio Guide: Welcome to the Hall of Coleoptera.')}
+          >
+            Play
+          </button>
+        </div>
+      </div>
+
       {/* ── Search ── */}
       <SearchBar onSearch={handleSearch} />
 
@@ -97,19 +139,19 @@ function MuseumSite({ cartCount, onAddToCart }) {
               <h2 id="exhibits-heading">Featured Exhibits</h2>
             </div>
             <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>
-              {filteredExhibits.length} of {exhibits.length} exhibits shown
+              {filteredExhibits.length} of {exhibitsList.length} exhibits shown
             </p>
           </div>
 
           <div className="exhibits-grid" role="list" aria-live="polite" aria-label="Exhibit cards">
             {filteredExhibits.length === 0 ? (
-              <div className="empty-state" role="listitem">
+              <div className="empty-state" role="listitem" id="search-empty-state">
                 <span className="empty-state-icon" aria-hidden="true">🔍</span>
-                <p>No exhibits match your search.</p>
+                <p>No exhibits match your search query.</p>
                 {searchFilter.error && (
-                  <p style={{ marginTop: '0.5rem', color: '#e05252', fontSize: '0.875rem' }}>
-                    Search error: invalid search pattern. (Check the browser console for details.)
-                  </p>
+                  <div className="search-error-callout" role="alert" style={{ marginTop: '0.75rem', color: '#e05252', fontSize: '0.875rem', background: 'rgba(224,82,82,0.1)', padding: '0.75rem 1rem', borderRadius: '6px', border: '1px solid rgba(224,82,82,0.2)' }}>
+                    <strong>Search Request Failed:</strong> {searchFilter.errorMessage || 'Internal server error while searching taxonomy.'}
+                  </div>
                 )}
               </div>
             ) : (
@@ -172,7 +214,11 @@ function MuseumSite({ cartCount, onAddToCart }) {
 
       {/* ── Modal ── */}
       {selectedExhibit && (
-        <Modal exhibit={selectedExhibit} onClose={handleCloseModal} />
+        <Modal
+          exhibit={selectedExhibit}
+          onClose={handleCloseModal}
+          onUpdateExhibit={handleExhibitUpdate}
+        />
       )}
     </>
   );
@@ -180,7 +226,6 @@ function MuseumSite({ cartCount, onAddToCart }) {
 
 export default function App() {
   const [cartCount, setCartCount] = useState(0);
-  const location = useLocation();
 
   const handleAddToCart = useCallback(() => {
     setCartCount(c => c + 1);

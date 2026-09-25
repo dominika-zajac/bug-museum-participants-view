@@ -1,6 +1,3 @@
-// Museum of Bugs – Exhibit Data
-// NOTE FOR WORKSHOP: Contains intentional data bugs for exercises #11 and #12
-
 import ladybugImg from '../assets/exhibit_ladybug_1780132631312.png';
 import stagBeetleImg from '../assets/exhibit_stag_beetle_1780132644943.png';
 import fireflyImg from '../assets/exhibit_firefly_1780132658945.png';
@@ -26,6 +23,7 @@ export const exhibits = [
     imageUrl: ladybugImg,
     funFact: 'A ladybug can eat up to 5,000 aphids in its lifetime.',
     exhibitNumber: 'EX-001',
+    notes: 'Specimen verified. Active bio-control exhibit.',
   },
   {
     id: 2,
@@ -38,6 +36,7 @@ export const exhibits = [
     imageUrl: stagBeetleImg,
     funFact: 'Males can grow up to 7.5cm long, mandibles included.',
     exhibitNumber: 'EX-002',
+    notes: 'Mandibles measured at 3.2cm.',
   },
   {
     id: 3,
@@ -50,6 +49,7 @@ export const exhibits = [
     imageUrl: fireflyImg,
     funFact: 'Their light is nearly 100% efficient — almost no heat is produced.',
     exhibitNumber: 'EX-003',
+    notes: 'Luciferin bioluminescence demonstration active.',
   },
   {
     id: 4,
@@ -62,6 +62,7 @@ export const exhibits = [
     imageUrl: atlasMothImg,
     funFact: 'Adults cannot eat and only live for 1–2 weeks.',
     exhibitNumber: 'EX-004',
+    notes: 'Pupated specimen EX-004.',
   },
   {
     id: 5,
@@ -74,6 +75,7 @@ export const exhibits = [
     imageUrl: prayingMantisImg,
     funFact: 'They are the only insect that can look over their shoulder.',
     exhibitNumber: 'EX-005',
+    notes: 'Ambush posture documented in hall 3.',
   },
   {
     id: 6,
@@ -86,6 +88,7 @@ export const exhibits = [
     imageUrl: herculesBeetleImg,
     funFact: 'The longest beetle in the world, reaching up to 17cm.',
     exhibitNumber: 'EX-006',
+    notes: 'Horn structure intact.',
   },
   {
     id: 7,
@@ -98,6 +101,7 @@ export const exhibits = [
     imageUrl: monarchButterflyImg,
     funFact: 'They are poisonous to predators due to toxins absorbed from milkweed.',
     exhibitNumber: 'EX-007',
+    notes: 'Migration corridor map displayed.',
   },
   {
     id: 8,
@@ -110,6 +114,7 @@ export const exhibits = [
     imageUrl: orchidMantisImg,
     funFact: 'Males are half the size of females and look so different they were once classified as separate species.',
     exhibitNumber: 'EX-008',
+    notes: 'Camouflage index: 9.8/10.',
   },
   {
     id: 9,
@@ -122,6 +127,7 @@ export const exhibits = [
     imageUrl: 'https://museum-of-bugs.example.com/images/ant-colony-missing.jpg',
     funFact: 'Leafcutter ants carry up to 50 times their body weight.',
     exhibitNumber: 'EX-009',
+    notes: 'Underground fungus chamber visible.',
   },
   {
     id: 10,
@@ -134,6 +140,7 @@ export const exhibits = [
     imageUrl: dragonflyImg,
     funFact: 'They can fly in all six directions including backwards and sideways.',
     exhibitNumber: 'EX-010',
+    notes: 'Prehistoric flight anatomy model.',
   },
   {
     id: 11,
@@ -146,6 +153,7 @@ export const exhibits = [
     imageUrl: leafInsectImg,
     funFact: 'They even reproduce without males through parthenogenesis.',
     exhibitNumber: 'EX-011',
+    notes: 'Parthenogenesis research record.',
   },
   {
     id: 12,
@@ -158,6 +166,7 @@ export const exhibits = [
     imageUrl: goliathBeetleImg,
     funFact: 'Their larvae are fed dog or cat food in captivity due to high protein needs.',
     exhibitNumber: 'EX-012',
+    notes: 'Weight recorded: 112g larva stage.',
   },
 ];
 
