@@ -20,14 +20,15 @@ Example `SKILL.md`:
 ```markdown
 ---
 name: investigation-loop
-description: Enforce the 5-step Investigation Loop (Observe, Investigate, Hypothesis, Fix, Verify) for debugging web applications with Chrome DevTools.
+description: Enforce the 6-step Investigation Loop (Observe, Reproduce, Investigate, Hypothesis, Fix, Verify) for debugging web applications with Chrome DevTools.
 ---
 
 # Investigation Loop
 
 ## Workflow Checklist
-1. OBSERVE: Reproduce in live browser...
-2. INVESTIGATE: Trace runtime error in Network/Console...
+1. OBSERVE: Understand context & environment...
+2. REPRODUCE: Trigger & confirm issue in live browser...
+3. INVESTIGATE: Trace runtime error in Network/Console...
 ...
 ```
 
@@ -49,7 +50,7 @@ The `description` field in the YAML frontmatter determines whether an agent trig
 - ❌ *"A skill about debugging."*
 
 ### 3. Provide Step-by-Step Action Protocols
-Break the task down into sequential gates (e.g. `Observe → Investigate → Hypothesis → Fix → Verify`).
+Break the task down into sequential gates (e.g. `Observe → Reproduce → Investigate → Hypothesis → Fix → Verify`).
 
 ### 4. Enforce Explicit Proof & Anti-Patterns
 Specify negative constraints (what NOT to do) and required verification proof:

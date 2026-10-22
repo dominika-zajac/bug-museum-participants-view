@@ -75,5 +75,8 @@ node_modules/
 .idea/
 
 # Agent skills and lockfiles
-.agents/
+.agents/*
+!.agents/skills/
+.agents/skills/*
+!.agents/skills/investigation-loop/
 skills-lock.json

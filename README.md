@@ -29,15 +29,25 @@ Open [http://localhost:5173](http://localhost:5173)
 
 ## 🔁 The Investigation Loop
 
-Every exercise in this workshop follows the 5-step diagnostic loop:
+Every exercise in this workshop follows the 6-step diagnostic loop:
 
 ```mermaid
 graph LR
-    O["<b>1. OBSERVE</b><br/>Reproduce & gather data"] --> I["<b>2. INVESTIGATE</b><br/>Trace runtime cause"]
-    I --> H["<b>3. HYPOTHESIS</b><br/>Form a theory"]
-    H --> F["<b>4. FIX</b><br/>Apply change"]
-    F --> V["<b>5. VERIFY</b><br/>Prove it works"]
+    O["<b>1. OBSERVE</b><br/>Understand context"] --> R["<b>2. REPRODUCE</b><br/>Trigger & confirm live"]
+    R --> I["<b>3. INVESTIGATE</b><br/>Trace runtime cause"]
+    I --> H["<b>4. HYPOTHESIS</b><br/>Form a theory"]
+    H --> F["<b>5. FIX</b><br/>Apply change"]
+    F --> V["<b>6. VERIFY</b><br/>Prove it works"]
     V -. "If verification fails" .-> I
+```
+
+```
+1. OBSERVE      → Understand user bug report & context
+2. REPRODUCE    → Trigger & confirm failure live in browser
+3. INVESTIGATE  → Inspect Network, Console & DOM with DevTools
+4. HYPOTHESIS   → Form evidence-backed theory & rule out red herrings
+5. FIX          → Apply minimal targeted code change
+6. VERIFY       → Prove fix works under matching live conditions
 ```
 
 Skill instructions are available in:

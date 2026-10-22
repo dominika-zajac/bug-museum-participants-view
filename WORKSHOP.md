@@ -9,28 +9,30 @@
 
 > **"Stop describing bugs to agents. Give them access to the running system and let them investigate."**
 
-When debugging with AI coding agents, avoid pasting a bug description and hoping the model guesses the fix from static code. Instead, give the agent access to the live running browser session and prompt it to follow the **5-step Investigation Loop**.
+When debugging with AI coding agents, avoid pasting a bug description and hoping the model guesses the fix from static code. Instead, give the agent access to the live running browser session and prompt it to follow the **6-step Investigation Loop**.
 
 ---
 
-## 🔁 The 5-Step Investigation Loop
+## 🔁 The 6-Step Investigation Loop
 
 ```mermaid
 graph LR
-    O["<b>1. OBSERVE</b><br/>Reproduce & gather data"] --> I["<b>2. INVESTIGATE</b><br/>Trace runtime cause"]
-    I --> H["<b>3. HYPOTHESIS</b><br/>Form a theory"]
-    H --> F["<b>4. FIX</b><br/>Apply change"]
-    F --> V["<b>5. VERIFY</b><br/>Prove it works"]
+    O["<b>1. OBSERVE</b><br/>Understand context"] --> R["<b>2. REPRODUCE</b><br/>Trigger & confirm live"]
+    R --> I["<b>3. INVESTIGATE</b><br/>Trace runtime cause"]
+    I --> H["<b>4. HYPOTHESIS</b><br/>Form a theory"]
+    H --> F["<b>5. FIX</b><br/>Apply change"]
+    F --> V["<b>6. VERIFY</b><br/>Prove it works"]
     V -. "If verification fails" .-> I
 ```
 
 | Step | Core Question | DevTools / Agent Action |
 | :--- | :--- | :--- |
-| **1. OBSERVE** | *What is actually happening?* | Reproduce the bug, take **Screenshots**, check **Console**, monitor **Network**, set **Device Viewport / Throttling**. |
-| **2. INVESTIGATE** | *Where does it break at runtime?* | Inspect **failed HTTP response bodies**, **DOM bounding boxes**, **computed CSS rules**, **event listeners**, **stack traces**. |
-| **3. HYPOTHESIS** | *Why is this happening?* | Connect runtime evidence to code; actively **rule out red herrings** and plausible false leads. |
-| **4. FIX** | *What is the minimal targeted fix?* | Apply minimal, clean change to client or server code. |
-| **5. VERIFY** | *Does it work under identical conditions?* | Re-run reproduction in browser under the **same mobile viewport, network throttling, or page reload** to capture proof. |
+| **1. OBSERVE** | *What is the reported issue & context?* | Read user bug report, identify target URL/component, note required viewport or network conditions. |
+| **2. REPRODUCE** | *Can we see the failure live in the browser?* | Navigate to page, trigger user actions, capture **Screenshots**, confirm broken UI or error state. |
+| **3. INVESTIGATE** | *Where does it break at runtime?* | Inspect **failed HTTP response bodies**, **DOM bounding boxes**, **computed CSS rules**, **event listeners**, **stack traces**. |
+| **4. HYPOTHESIS** | *Why is this happening?* | Connect runtime evidence to code; actively **rule out red herrings** and plausible false leads. |
+| **5. FIX** | *What is the minimal targeted fix?* | Apply minimal, clean change to client or server code. |
+| **6. VERIFY** | *Does it work under identical conditions?* | Re-run reproduction in browser under the **same mobile viewport, network throttling, or page reload** to capture proof. |
 
 ---
 

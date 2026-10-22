@@ -4,7 +4,7 @@
  * Bug Museum Workshop – Evals Benchmark Runner
  * 
  * Verifies the live state of the application against the 4 Workshop Exercises + Warm-Up,
- * demonstrating why the 5-step Investigation Loop and DevTools runtime access are essential.
+ * demonstrating why the 6-step Investigation Loop and DevTools runtime access are essential.
  */
 
 const http = require('http');
