@@ -10,8 +10,54 @@ A hands-on workshop environment for **"Debugging the Web with AI Agents + Chrome
 
 ### Prerequisites
 
-- Node.js 18+
-- npm 9+
+- **Node.js 18+**
+- **npm 9+**
+
+#### Installing Node.js & npm (if needed)
+
+First, check if you already have Node.js and npm installed:
+
+```bash
+node -v
+npm -v
+```
+
+If you need to install or update them:
+
+- **Official Installer (Recommended for beginners):**
+  - Download and install the LTS version from [nodejs.org](https://nodejs.org/) (npm is automatically included).
+
+- **Using a Version Manager (Recommended for flexibility):**
+  - **macOS / Linux (`nvm`):**
+    ```bash
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
+    # Restart terminal or reload shell profile, then:
+    nvm install 20
+    nvm use 20
+    ```
+  - **Windows (`nvm-windows` or `fnm`):**
+    - Install [nvm-windows](https://github.com/coreybutler/nvm-windows/releases) or [fnm](https://github.com/Schniz/fnm).
+
+- **Using Package Managers:**
+  - **macOS (Homebrew):**
+    ```bash
+    brew install node
+    ```
+  - **Windows (winget):**
+    ```powershell
+    winget install OpenJS.NodeJS.LTS
+    ```
+  - **Linux (Ubuntu / Debian):**
+    ```bash
+    curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+    sudo apt-get install -y nodejs
+    ```
+
+> **Tip:** If you already have Node.js installed but need to update npm to version 9+, run:
+> ```bash
+> npm install -g npm@latest
+> ```
+
 
 ### Install & Run
 
